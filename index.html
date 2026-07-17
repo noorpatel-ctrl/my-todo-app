@@ -64,6 +64,12 @@
     border-radius: 4px;
     cursor: pointer;
   }
+  #counter {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #666;
+  }
 </style>
 </head>
 <body>
@@ -75,6 +81,7 @@
     <button onclick="addTask()">Add</button>
   </div>
   <ul id="taskList"></ul>
+  <div id="counter">0 tasks left</div>
 </div>
 
 <script>
@@ -86,18 +93,32 @@
     const li = document.createElement("li");
     const span = document.createElement("span");
     span.textContent = text;
-    span.onclick = () => li.classList.toggle("done");
+    span.onclick = () => {
+      li.classList.toggle("done");
+      updateCounter();
+    };
 
     const delBtn = document.createElement("button");
     delBtn.textContent = "x";
     delBtn.className = "delete-btn";
-    delBtn.onclick = () => li.remove();
+    delBtn.onclick = () => {
+      li.remove();
+      updateCounter();
+    };
 
     li.appendChild(span);
     li.appendChild(delBtn);
     document.getElementById("taskList").appendChild(li);
 
     input.value = "";
+    updateCounter();
+  }
+
+  function updateCounter() {
+    const items = document.querySelectorAll("#taskList li");
+    const remaining = document.querySelectorAll("#taskList li:not(.done)").length;
+    document.getElementById("counter").textContent =
+      `${remaining} task${remaining === 1 ? "" : "s"} left (${items.length} total)`;
   }
 </script>
 
